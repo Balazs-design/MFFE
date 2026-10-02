@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MFFE – Magyar Független Fuvarozók Egyesülete</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        dark:  '#1E1E20',
+        text:  '#13131F',
+        blue:  { DEFAULT: '#03A9F4', dk: '#0288D1' },
+        navy:  '#152238',
+        navy2: '#101B2D',
+        soft:  '#F5F6F8',
+      },
+      fontFamily: { sans: ['Poppins', 'Helvetica', 'Arial', 'sans-serif'] },
+    }
+  }
+}
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  .modal { display: none; }
+  .modal.open { display: flex; }
+  .partner img { filter: grayscale(1) brightness(1.1); opacity: .65; transition: .2s; }
+  .partner:hover img { filter: none; opacity: 1; }
+  #header.scrolled { background: #101B2D; box-shadow: 0 2px 20px rgba(0,0,0,.25); }
+  details summary::-webkit-details-marker { display: none; }
+  details[open] .plus { transform: rotate(45deg); }
+  .hero-arc { clip-path: ellipse(140% 100% at 50% 0%); }
+  @media (max-width: 640px) { .hero-arc { clip-path: ellipse(190% 100% at 50% 0%); } }
+</style>
+</head>
+<body class="font-sans text-text bg-white antialiased">
+
+<!-- Fejléc: a hero fölött átlátszó, görgetésre sötétkék -->
+<header id="header" class="fixed top-0 inset-x-0 z-40 transition-colors duration-300">
+  <div class="max-w-6xl mx-auto px-5 h-20 flex items-center justify-between gap-6 text-white">
+    <a href="#" class="leading-tight">
+      <div class="text-2xl font-bold tracking-tight">MFFE</div>
+      <div class="text-[11px] text-white/60 hidden sm:block">Magyar Független Fuvarozók Egyesülete</div>
+    </a>
+    <nav class="hidden lg:flex items-center gap-7 text-[13px] font-medium tracking-[.08em] uppercase text-white/85">
+      <a href="#rolunk" class="hover:text-blue">Rólunk</a>
+      <a href="#eredmenyek" class="hover:text-blue">Eredményeink</a>
+      <a href="#tagfelvetel" class="hover:text-blue">Tagfelvétel</a>
+      <a href="#hirek" class="hover:text-blue">Hírek</a>
+      <a href="#kapcsolat" class="hover:text-blue">Kapcsolat</a>
+    </nav>
+    <div class="flex items-center gap-4">
+      <button onclick="openModal('login')" class="hidden md:inline text-sm text-white/85 hover:text-white">Tagi belépés</button>
+      <button onclick="openModal('register')" class="hidden sm:inline-block bg-blue hover:bg-blue-dk text-white text-sm font-semibold px-5 py-3 rounded">Csatlakozom</button>
+      <button id="burger" class="lg:hidden p-2" aria-label="Menü">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobileMenu" class="hidden lg:hidden bg-navy2 text-white">
+    <div class="px-5 py-4 flex flex-col gap-3 text-sm font-medium uppercase tracking-wider">
+      <a href="#rolunk">Rólunk</a><a href="#eredmenyek">Eredményeink</a><a href="#tagfelvetel">Tagfelvétel</a>
+      <a href="#hirek">Hírek</a><a href="#kapcsolat">Kapcsolat</a>
+      <button onclick="openModal('login')" class="text-left uppercase">Tagi belépés</button>
+    </div>
+  </div>
+</header>
+
+<!-- Hero: íves alsó éllel -->
+<section class="hero-arc relative text-white bg-navy2">
+  <img src="https://www.mffe.eu/wp-content/uploads/2026/02/tuntetes.jpg" alt="" class="absolute inset-0 w-full h-full object-cover">
+  <div class="absolute inset-0 bg-gradient-to-b from-navy2/85 via-navy2/55 to-navy2/80"></div>
+  <div class="relative max-w-4xl mx-auto px-5 pt-40 pb-40 md:pt-52 md:pb-52 text-center">
+    <p class="text-xs sm:text-sm font-semibold uppercase tracking-[.25em] text-blue">Magyar Független Fuvarozók Egyesülete</p>
+    <h1 class="mt-5 text-3xl sm:text-5xl md:text-[60px] font-bold !leading-[1.12]">Erős érdekképviselet.<br class="hidden sm:block"> Tiszta verseny.<br class="hidden sm:block"> <span class="text-blue">A magyar fuvarozókért.</span></h1>
+    <p class="mt-7 text-white/85 text-base md:text-lg max-w-2xl mx-auto">Egyedül nehéz hallatni a hangod. Csatlakozz több száz fuvarozó vállalkozáshoz, és alakítsuk együtt a szakmát érintő döntéseket.</p>
+    <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+      <button onclick="openModal('register')" class="bg-blue hover:bg-blue-dk text-white font-semibold text-sm uppercase tracking-wider px-8 py-4 rounded">Csatlakozom az egyesülethez</button>
+      <a href="#kihivasok" class="border border-white/60 hover:bg-white hover:text-dark text-white font-semibold text-sm uppercase tracking-wider px-8 py-4 rounded">Miért fontos ez?</a>
+    </div>
+    <ul class="mt-9 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white/80">
+      <li class="flex items-center gap-2"><svg class="w-4 h-4 text-blue" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>400+ tagvállalkozás</li>
+      <li class="flex items-center gap-2"><svg class="w-4 h-4 text-blue" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Online jelentkezés pár perc alatt</li>
+      <li class="flex items-center gap-2"><svg class="w-4 h-4 text-blue" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Kézzelfogható eredmények</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 1. PROBLÉMA -->
+<section id="kihivasok" class="pt-24 pb-20 px-5">
+  <div class="max-w-5xl mx-auto">
+    <p class="text-xs font-semibold uppercase tracking-[.2em] text-blue">Ismerős?</p>
+    <h2 class="mt-4 text-3xl md:text-[44px] font-bold leading-tight max-w-3xl">A fuvarozói szakma fordulóponthoz érkezett.</h2>
+    <div class="mt-14 grid md:grid-cols-3 border-t border-black/10">
+      <div class="py-8 md:pr-8 border-b md:border-b-0 md:border-r border-black/10">
+        <div class="text-5xl font-bold text-black/10">01</div>
+        <h3 class="mt-3 text-xl font-semibold">Növekvő költségek</h3>
+        <p class="mt-2 text-[15px] text-black/65 leading-relaxed">Üzemanyag, útdíj, bérek – a mozgástér hónapról hónapra szűkül.</p>
+      </div>
+      <div class="py-8 md:px-8 border-b md:border-b-0 md:border-r border-black/10">
+        <div class="text-5xl font-bold text-black/10">02</div>
+        <h3 class="mt-3 text-xl font-semibold">Fokozódó adminisztráció</h3>
+        <p class="mt-2 text-[15px] text-black/65 leading-relaxed">Egyre több papírmunka, egyre kevesebb idő a valódi munkára.</p>
+      </div>
+      <div class="py-8 md:pl-8">
+        <div class="text-5xl font-bold text-black/10">03</div>
+        <h3 class="mt-3 text-xl font-semibold">Szigorodó szabályozás</h3>
+        <p class="mt-2 text-[15px] text-black/65 leading-relaxed">A döntések a fejed fölött születnek – sokszor nélküled.</p>
+      </div>
+    </div>
+    <p class="mt-12 text-xl md:text-2xl font-semibold text-center">Egy vállalkozás egyedül nehezen hallatja a hangját.</p>
+  </div>
+</section>
+
+<!-- 2. MEGOLDÁS: az egyesület -->
+<section id="rolunk" class="bg-soft py-24 px-5">
+  <div class="max-w-5xl mx-auto">
+    <p class="text-xs font-semibold uppercase tracking-[.2em] text-blue">A megoldás</p>
+    <p class="mt-4 text-2xl sm:text-3xl md:text-[40px] font-semibold !leading-[1.3]">Egy szervezett közösség viszont <span class="text-blue">alakítja a döntéseket.</span></p>
+    <p class="mt-6 text-lg text-black/70 leading-relaxed max-w-3xl">A Magyar Független Fuvarozók Egyesülete azért jött létre, hogy a magyar fuvarozók érdekei ne maradjanak képviselet nélkül. A hazai közúti árufuvarozásban és személyszállításban tevékenykedő mikro-, kis- és középvállalkozások szakmai érdekképviselete vagyunk.</p>
+    <div class="mt-12 pt-10 border-t border-black/10">
+      <p class="text-xs font-semibold uppercase tracking-[.2em] text-black/40">Értékeink</p>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <span class="bg-white border border-black/10 rounded-full px-4 py-1.5 text-sm font-medium">Függetlenség</span>
+        <span class="bg-white border border-black/10 rounded-full px-4 py-1.5 text-sm font-medium">Határozottság</span>
+        <span class="bg-white border border-black/10 rounded-full px-4 py-1.5 text-sm font-medium">Szakmaiság</span>
+        <span class="bg-white border border-black/10 rounded-full px-4 py-1.5 text-sm font-medium">Összefogás</span>
+        <span class="bg-white border border-black/10 rounded-full px-4 py-1.5 text-sm font-medium">Átláthatóság</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. MIT KAPSZ -->
+<section id="elonyok" class="relative text-white">
+  <img src="https://www.mffe.eu/wp-content/uploads/2026/02/targyalas.jpg" alt="" class="absolute inset-0 w-full h-full object-cover">
+  <div class="absolute inset-0 bg-navy2/90"></div>
+  <div class="relative max-w-6xl mx-auto px-5 py-24 grid lg:grid-cols-3 gap-12 items-center">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[.2em] text-blue">Tagként</p>
+      <h2 class="mt-3 text-3xl md:text-[42px] font-bold leading-tight">Mit kapsz, ha csatlakozol?</h2>
+      <p class="mt-5 text-white/75 text-[15px] leading-relaxed">Nem leszel egyedül a következő változásnál.</p>
+    </div>
+    <div class="lg:col-span-2 grid sm:grid-cols-2 gap-x-10 gap-y-8">
+      <div class="border-l-2 border-blue pl-5"><h3 class="font-semibold text-lg">Érdekképviselet</h3><p class="mt-1 text-white/75 text-[15px]">Kiállunk a fuvarozókért a hatóságok és döntéshozók előtt.</p></div>
+      <div class="border-l-2 border-blue pl-5"><h3 class="font-semibold text-lg">Szakmai segítség</h3><p class="mt-1 text-white/75 text-[15px]">Útmutatás jogi és adminisztratív kérdésekben.</p></div>
+      <div class="border-l-2 border-blue pl-5"><h3 class="font-semibold text-lg">Első kézből értesülsz</h3><p class="mt-1 text-white/75 text-[15px]">Tagi tájékoztatók a szakmát érintő változásokról, mielőtt késő lenne.</p></div>
+      <div class="border-l-2 border-blue pl-5"><h3 class="font-semibold text-lg">Közösség</h3><p class="mt-1 text-white/75 text-[15px]">Kapcsolat fuvarozó vállalkozásokkal országszerte.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. BIZONYÍTÉK: eredmények + partnerek -->
+<section id="eredmenyek" class="py-24 px-5">
+  <div class="max-w-6xl mx-auto">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <img src="https://www.mffe.eu/wp-content/uploads/2026/02/gabona.jpg" alt="" class="w-full rounded shadow-lg aspect-[3/2] object-cover bg-soft">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[.2em] text-blue">Eredményeink</p>
+        <h2 class="mt-3 text-3xl md:text-[38px] font-bold leading-tight">Nem ígéretek – eredmények.</h2>
+        <div class="mt-6 border-l-2 border-blue pl-5">
+          <div class="text-xs text-black/50">2026. február 15.</div>
+          <h3 class="mt-1 text-lg font-semibold leading-snug">Hatalmas MFFE siker a Bászna ügyben – a fuvarozók megkapják a kártalanítást</h3>
+          <p class="mt-2 text-[15px] text-black/65">Ide kerül 2–3 mondat az ügy lényegéről: mi volt a probléma, mit tett az egyesület, és mit nyertek vele a fuvarozók.</p>
+          <a href="#" class="inline-block mt-3 text-blue font-semibold text-sm">Elolvasom →</a>
+        </div>
+        <p class="mt-8 text-[15px] text-black/65">Ez az, amire egy vállalkozás egyedül nem lenne képes.</p>
+      </div>
+    </div>
+    <div id="partnerek" class="mt-24">
+      <h2 class="text-center text-3xl md:text-[42px] font-bold">Ők már beálltak mellénk</h2>
+      <div class="mt-12 grid sm:grid-cols-3 gap-5">
+        <div class="bg-white rounded border border-black/10 h-36 md:h-44 flex items-center justify-center p-8 shadow-sm hover:shadow-md transition"><img src="https://www.mffe.eu/wp-content/uploads/2026/08/LH-logo-768x222.png" alt="" class="max-h-full max-w-full object-contain"></div>
+        <div class="bg-white rounded border border-black/10 h-36 md:h-44 flex items-center justify-center p-8 shadow-sm hover:shadow-md transition"><img src="https://www.mffe.eu/wp-content/uploads/2026/08/shell-vector-logo-1.png" alt="" class="max-h-full max-w-full object-contain"></div>
+        <div class="bg-white rounded border border-black/10 h-36 md:h-44 flex items-center justify-center p-8 shadow-sm hover:shadow-md transition"><img src="https://www.mffe.eu/wp-content/uploads/2026/08/uta.png" alt="" class="max-h-full max-w-full object-contain"></div>
+      </div>
+      <p class="mt-14 text-center text-xs font-semibold uppercase tracking-[.2em] text-black/40">További partnereink</p>
+      <div class="mt-8 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-x-8 gap-y-8 items-center">
+                <div class="partner h-10 flex items-center justify-center"><img src="https://www.mffe.eu/wp-content/uploads/2026/08/oil-hungary-logo-b.png" alt="" class="max-h-full max-w-full object-contain"></div>
+        <div class="partner h-10 flex items-center justify-center"><img src="https://www.mffe.eu/wp-content/uploads/2026/08/forbis-logo-scaled-1.png" alt="" class="max-h-full max-w-full object-contain"></div>
+        <div class="partner h-10 flex items-center justify-center"><img src="https://www.mffe.eu/wp-content/uploads/2026/08/Markus-logo-web-500x1000-1.png" alt="" class="max-h-full max-w-full object-contain"></div>
+        <div class="partner h-10 flex items-center justify-center"><img src="https://www.mffe.eu/wp-content/uploads/2026/08/RGB_logo_bright-scaled.png" alt="" class="max-h-full max-w-full object-contain"></div>
+        <div class="partner h-10 flex items-center justify-center"><img src="https://www.mffe.eu/wp-content/uploads/2026/08/image.png" alt="" class="max-h-full max-w-full object-contain"></div>
+        <div class="partner h-10 flex items-center justify-center"><img src="https://www.mffe.eu/wp-content/uploads/2026/08/Kep1.png" alt="" class="max-h-full max-w-full object-contain"></div>
+        <div class="partner h-10 flex items-center justify-center"><img src="https://www.mffe.eu/wp-content/uploads/2026/08/1000014979.jpg" alt="" class="max-h-full max-w-full object-contain"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. JÖVŐKÉP -->
+<section class="bg-navy2 text-white px-5 overflow-hidden">
+  <div class="max-w-5xl mx-auto py-24 text-center">
+    <p class="text-xs font-semibold uppercase tracking-[.2em] text-blue">Jövőképünk</p>
+    <p class="mt-5 text-2xl sm:text-3xl md:text-[42px] font-semibold !leading-[1.3]">„Hiszünk abban, hogy az összefogás nem lehetőség, hanem <span class="text-blue">szükségszerűség.</span>”</p>
+    <div class="mt-16 grid md:grid-cols-2 gap-px bg-white/10 rounded overflow-hidden text-left">
+      <div class="bg-navy2 p-8 md:p-10">
+        <p class="text-xs font-semibold uppercase tracking-[.2em] text-white/40">Ahol ma tartunk</p>
+        <p class="mt-3 text-4xl font-bold">400+ <span class="text-lg font-medium text-white/70">tagvállalkozás</span></p>
+        <p class="mt-3 text-white/65 text-[15px]">Egy közösség, amely már most kézzelfogható eredményeket ért el.</p>
+      </div>
+      <div class="bg-navy2 p-8 md:p-10">
+        <p class="text-xs font-semibold uppercase tracking-[.2em] text-white/40">Ahová tartunk</p>
+        <p class="mt-3 text-2xl font-semibold leading-snug">Egy szakma, ahol a fuvarozók nem elszenvedői, hanem <span class="text-blue">alakítói</span> a döntéseknek.</p>
+        <p class="mt-3 text-white/65 text-[15px]">Minél többen vagyunk, annál erősebb a hangunk.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. KIFOGÁSKEZELÉS -->
+<section id="gyik" class="py-24 px-5">
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-3 gap-12">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[.2em] text-blue">Még hezitálsz?</p>
+      <h2 class="mt-3 text-3xl md:text-[42px] font-bold leading-tight">Amit mások is kérdeztek</h2>
+      <p class="mt-5 text-[15px] text-black/65">Nem találod a választ? <a href="#kapcsolat" class="text-blue font-medium">Írj nekünk</a>, és személyesen válaszolunk.</p>
+    </div>
+    <div class="lg:col-span-2 divide-y divide-black/10 border-y border-black/10">
+      <details class="py-5" open>
+        <summary class="flex justify-between items-center gap-4 cursor-pointer font-medium text-lg">„Mit számít egy kis vállalkozás egy egyesületben?”<span class="plus text-blue text-2xl leading-none transition">+</span></summary>
+        <p class="mt-3 text-[15px] text-black/65 leading-relaxed">Pont ez a lényeg: egyedül egy kis vállalkozás hangja elvész, több száz együtt viszont már tárgyalópartner. Az egyesületet a mikro-, kis- és középvállalkozások érdekeinek képviseletére hoztuk létre.</p>
+      </details>
+      <details class="py-5">
+        <summary class="flex justify-between items-center gap-4 cursor-pointer font-medium text-lg">„Nincs időm még erre is.”<span class="plus text-blue text-2xl leading-none transition">+</span></summary>
+        <p class="mt-3 text-[15px] text-black/65 leading-relaxed">Nem is kell. A jelentkezés néhány perc online, utána az egyesület dolgozik – te a lényeges változásokról tájékoztatást kapsz.</p>
+      </details>
+      <details class="py-5">
+        <summary class="flex justify-between items-center gap-4 cursor-pointer font-medium text-lg">„Megéri a tagdíjat?”<span class="plus text-blue text-2xl leading-none transition">+</span></summary>
+        <p class="mt-3 text-[15px] text-black/65 leading-relaxed">Gondolj a Bászna ügyre: amit egy vállalkozás egyedül nem tudott volna elérni, azt az egyesület kiharcolta a fuvarozóknak.</p>
+      </details>
+      <details class="py-5">
+        <summary class="flex justify-between items-center gap-4 cursor-pointer font-medium text-lg">„Kik lehetnek tagok?”<span class="plus text-blue text-2xl leading-none transition">+</span></summary>
+        <p class="mt-3 text-[15px] text-black/65 leading-relaxed">A hazai közúti árufuvarozásban és személyszállításban tevékenykedő mikro-, kis- és középvállalkozások.</p>
+      </details>
+      <details class="py-5">
+        <summary class="flex justify-between items-center gap-4 cursor-pointer font-medium text-lg">„Mire kötelez a tagság?”<span class="plus text-blue text-2xl leading-none transition">+</span></summary>
+        <p class="mt-3 text-[15px] text-black/65 leading-relaxed">[Ide jön a pontos válasz az alapszabály alapján – pl. tagdíjfizetés, kilépés módja.]</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- 7. ÁR + CSATLAKOZÁS -->
+<section id="tagfelvetel" class="bg-soft py-24 px-5">
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[.2em] text-blue">Tagság</p>
+      <h2 class="mt-3 text-3xl md:text-[42px] font-bold leading-tight">Csatlakozz a közös fellépéshez!</h2>
+      <p class="mt-5 text-[15px] leading-relaxed text-black/70">Teljesen online, papírozás és telefonálgatás nélkül.</p>
+      <ul class="mt-8 divide-y divide-black/10 border-y border-black/10">
+        <li class="py-5 flex gap-5"><span class="text-blue font-semibold">01</span><div><div class="font-medium">Online jelentkezés</div><div class="text-sm text-black/60">Pár alapadat egy rövid űrlapon.</div></div></li>
+        <li class="py-5 flex gap-5"><span class="text-blue font-semibold">02</span><div><div class="font-medium">Visszaigazolás és tagdíjszámla e-mailben</div><div class="text-sm text-black/60">Automatikusan, azonnal megérkezik.</div></div></li>
+        <li class="py-5 flex gap-5"><span class="text-blue font-semibold">03</span><div><div class="font-medium">Hozzáférés a tagi felülethez</div><div class="text-sm text-black/60">Tagi hírek, dokumentumok és tagdíj-státusz egy helyen.</div></div></li>
+      </ul>
+    </div>
+    <div class="bg-white rounded shadow-lg p-8 md:p-10 border-t-4 border-blue">
+      <p class="text-xs font-semibold uppercase tracking-[.2em] text-black/40">Éves tagdíj</p>
+      <div class="mt-3 flex items-baseline gap-2"><span class="text-5xl font-bold">XX XXX Ft</span><span class="text-black/50">/ év</span></div>
+      <p class="mt-2 text-sm text-black/60">Ez havonta kb. X XXX Ft.</p>
+      <ul class="mt-7 space-y-3 text-[15px]">
+        <li class="flex gap-3"><svg class="w-5 h-5 text-blue shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Szakmai érdekképviselet</li>
+        <li class="flex gap-3"><svg class="w-5 h-5 text-blue shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Tagi tájékoztatók és hírlevél</li>
+        <li class="flex gap-3"><svg class="w-5 h-5 text-blue shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Szakmai segítség kérdések esetén</li>
+        <li class="flex gap-3"><svg class="w-5 h-5 text-blue shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Tagi felület online hozzáféréssel</li>
+      </ul>
+      <button onclick="openModal('register')" class="mt-8 w-full bg-blue hover:bg-blue-dk text-white font-semibold text-sm uppercase tracking-wider py-4 rounded">Jelentkezem tagnak</button>
+      <p class="mt-3 text-center text-xs text-black/50">Pár perc az egész · Kérdésed van? <a href="#kapcsolat" class="text-blue">Írj nekünk</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- 8. BLOG -->
+<!-- Hírek -->
+<section id="hirek" class="py-24 px-5">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex items-end justify-between gap-4">
+      <div><p class="text-xs font-semibold uppercase tracking-[.2em] text-blue">Blog</p><h2 class="mt-3 text-3xl md:text-[42px] font-bold">Híreink</h2></div>
+      <a href="#" class="text-blue font-semibold text-sm uppercase tracking-wider hover:underline">Összes hír</a>
+    </div>
+    <div class="mt-10 grid md:grid-cols-3 gap-6">
+      <article class="bg-soft rounded overflow-hidden hover:shadow-md transition">
+        <img src="https://www.mffe.eu/wp-content/uploads/2026/02/gabona.jpg" alt="" class="w-full aspect-[16/10] object-cover bg-black/5">
+        <div class="p-6">
+          <div class="text-xs text-black/50">2026. február 15.</div>
+          <h3 class="mt-2 font-semibold text-lg leading-snug">Hatalmas MFFE siker a Bászna ügyben – a fuvarozók megkapják a kártalanítást</h3>
+          <a href="#" class="inline-block mt-4 text-blue font-semibold text-sm">Tovább…</a>
+        </div>
+      </article>
+      <article class="bg-soft rounded overflow-hidden hover:shadow-md transition">
+        <img src="https://www.mffe.eu/wp-content/uploads/2026/02/targyalas.jpg" alt="" class="w-full aspect-[16/10] object-cover bg-black/5">
+        <div class="p-6">
+          <div class="text-xs text-black/50">Példa bejegyzés</div>
+          <h3 class="mt-2 font-semibold text-lg leading-snug">Egyeztetés a döntéshozókkal – összefoglaló</h3>
+          <a href="#" class="inline-block mt-4 text-blue font-semibold text-sm">Tovább…</a>
+        </div>
+      </article>
+      <article class="bg-soft rounded overflow-hidden hover:shadow-md transition">
+        <img src="https://www.mffe.eu/wp-content/uploads/2026/02/tuntetes.jpg" alt="" class="w-full aspect-[16/10] object-cover bg-black/5">
+        <div class="p-6">
+          <div class="text-xs text-black/50">Példa bejegyzés</div>
+          <h3 class="mt-2 font-semibold text-lg leading-snug">Tagi tájékoztató a szakmát érintő változásokról</h3>
+          <a href="#" class="inline-block mt-4 text-blue font-semibold text-sm">Tovább…</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 9. CSATLAKOZÁSI SZÁNDÉK -->
+<!-- Záró CTA + hírlevél -->
+<section class="bg-navy2 text-white px-5">
+  <div class="max-w-6xl mx-auto py-20 grid lg:grid-cols-2 gap-12 items-center">
+    <div>
+      <h2 class="text-3xl md:text-[40px] font-bold leading-tight">Legyél te is az összefogás része.</h2>
+      <p class="mt-4 text-white/75 text-[15px]">Minél többen vagyunk, annál erősebb a hangunk.</p>
+      <button onclick="openModal('register')" class="mt-8 bg-blue hover:bg-blue-dk text-white font-semibold text-sm uppercase tracking-wider px-8 py-4 rounded">Csatlakozom az egyesülethez</button>
+    </div>
+    <div class="lg:border-l lg:border-white/10 lg:pl-12">
+      <p class="font-semibold">Még nem döntöttél? Iratkozz fel hírlevelünkre.</p>
+      <p class="mt-1 text-sm text-white/60">A szakmát érintő legfontosabb hírek, közvetlenül az e-mail fiókodba.</p>
+      <form onsubmit="event.preventDefault(); done(this)" class="mt-5 flex flex-col sm:flex-row gap-3">
+        <input type="email" required placeholder="E-mail cím" class="flex-1 bg-white/10 border border-white/15 text-white placeholder-white/50 px-4 py-3.5 rounded outline-none focus:border-blue">
+        <button class="border border-white/40 hover:bg-white hover:text-dark text-white font-semibold text-sm uppercase tracking-wider px-6 py-3.5 rounded">Feliratkozom</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Kapcsolat -->
+<section id="kapcsolat" class="py-24 px-5">
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-5 gap-12">
+    <div class="lg:col-span-2">
+      <h2 class="text-3xl md:text-[42px] font-bold leading-tight">Vedd fel velünk a kapcsolatot</h2>
+      <p class="mt-5 text-lg font-medium">Kérdésed van a tagsággal kapcsolatban? Kollégáink hamarosan válaszolnak.</p>
+      <div class="mt-8 space-y-3 text-[15px]">
+        <div><span class="text-black/50">E-mail:</span> <a href="mailto:info@mffe.eu" class="font-medium hover:text-blue">info@mffe.eu</a></div>
+        <div><span class="text-black/50">Cím:</span> <span class="font-medium">3934 Tolcsva, Petőfi Sándor utca 15.</span></div>
+        <div><span class="text-black/50">Facebook:</span> <a href="https://www.facebook.com/MagyarFuggetlenFuvarozokEgyesulete" target="_blank" class="font-medium hover:text-blue">Magyar Független Fuvarozók Egyesülete</a></div>
+      </div>
+    </div>
+    <form onsubmit="event.preventDefault(); done(this)" class="lg:col-span-3 grid sm:grid-cols-2 gap-4">
+      <input required placeholder="Név" class="border border-black/15 rounded px-4 py-3.5 outline-none focus:border-blue">
+      <input type="email" required placeholder="E-mail" class="border border-black/15 rounded px-4 py-3.5 outline-none focus:border-blue">
+      <textarea rows="5" placeholder="Üzenet" class="sm:col-span-2 border border-black/15 rounded px-4 py-3.5 outline-none focus:border-blue"></textarea>
+      <label class="sm:col-span-2 flex items-start gap-2 text-sm text-black/60"><input type="checkbox" required class="mt-1"> Elfogadom az adatkezelési tájékoztatót.</label>
+      <div class="sm:col-span-2"><button class="bg-blue hover:bg-blue-dk text-white font-semibold text-sm uppercase tracking-wider px-8 py-4 rounded">Üzenet küldése</button></div>
+    </form>
+  </div>
+</section>
+
+<!-- Lábléc -->
+<footer class="bg-dark text-white/70 px-5 pb-20 sm:pb-0">
+  <div class="max-w-6xl mx-auto py-14 grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-[15px]">
+    <div class="md:col-span-2">
+      <div class="text-white text-xl font-bold">MFFE</div>
+      <p class="mt-3 max-w-sm">Magyar Független Fuvarozók Egyesülete<br>3934 Tolcsva, Petőfi Sándor utca 15.</p>
+    </div>
+    <div>
+      <div class="text-white font-semibold mb-3">Egyesület</div>
+      <ul class="space-y-2"><li><a href="#" class="hover:text-white">Bemutatkozás</a></li><li><a href="#" class="hover:text-white">Programunk</a></li><li><a href="#hirek" class="hover:text-white">Hírek</a></li><li><a href="#partnerek" class="hover:text-white">Partnereink</a></li></ul>
+    </div>
+    <div>
+      <div class="text-white font-semibold mb-3">Tagoknak</div>
+      <ul class="space-y-2"><li><button onclick="openModal('register')" class="hover:text-white">Tagfelvétel</button></li><li><button onclick="openModal('login')" class="hover:text-white">Tagi belépés</button></li><li><a href="#" class="hover:text-white">Adatkezelési tájékoztató</a></li></ul>
+    </div>
+  </div>
+  <div class="border-t border-white/10">
+    <div class="max-w-6xl mx-auto py-6 text-sm">© 2026 MFFE – Magyar Független Fuvarozók Egyesülete</div>
+  </div>
+</footer>
+
+<!-- Mobilon mindig látható csatlakozás gomb -->
+<div id="stickyCta" class="sm:hidden fixed bottom-0 inset-x-0 z-30 bg-navy2/95 backdrop-blur p-3 translate-y-full transition-transform duration-300">
+  <button onclick="openModal('register')" class="w-full bg-blue text-white font-semibold text-sm uppercase tracking-wider py-4 rounded">Csatlakozom az egyesülethez</button>
+</div>
+
+<!-- Belépés / tagfelvétel ablak -->
+<div id="modal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/60 p-4" onclick="if(event.target===this)closeModal()">
+  <div class="bg-white w-full max-w-md rounded shadow-2xl">
+    <div class="flex border-b border-black/10 text-sm font-semibold uppercase tracking-wider">
+      <button id="tab-register" onclick="switchTab('register')" class="flex-1 py-4">Tagfelvétel</button>
+      <button id="tab-login" onclick="switchTab('login')" class="flex-1 py-4">Tagi belépés</button>
+    </div>
+    <div class="p-8">
+      <form id="form-register" onsubmit="event.preventDefault(); done(this)" class="space-y-4">
+        <p class="text-sm text-black/60">Csak pár adat – a többit később, e-mailben egyeztetjük.</p>
+        <input required placeholder="Cégnév" class="w-full border border-black/15 rounded px-4 py-3.5 outline-none focus:border-blue">
+        <input required placeholder="Kapcsolattartó neve" class="w-full border border-black/15 rounded px-4 py-3.5 outline-none focus:border-blue">
+        <input type="email" required placeholder="E-mail cím" class="w-full border border-black/15 rounded px-4 py-3.5 outline-none focus:border-blue">
+        <input placeholder="Telefonszám" class="w-full border border-black/15 rounded px-4 py-3.5 outline-none focus:border-blue">
+        <label class="flex items-start gap-2 text-sm text-black/60"><input type="checkbox" required class="mt-1"> Elfogadom az alapszabályt és az adatkezelési tájékoztatót.</label>
+        <button class="w-full bg-blue hover:bg-blue-dk text-white font-semibold text-sm uppercase tracking-wider py-4 rounded">Jelentkezés elküldése</button>
+      </form>
+      <form id="form-login" onsubmit="event.preventDefault(); done(this)" class="space-y-4 hidden">
+        <input type="email" required placeholder="E-mail cím" class="w-full border border-black/15 rounded px-4 py-3.5 outline-none focus:border-blue">
+        <input type="password" required placeholder="Jelszó" class="w-full border border-black/15 rounded px-4 py-3.5 outline-none focus:border-blue">
+        <div class="text-right"><a href="#" class="text-sm text-blue">Elfelejtett jelszó?</a></div>
+        <button class="w-full bg-blue hover:bg-blue-dk text-white font-semibold text-sm uppercase tracking-wider py-4 rounded">Belépés</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Fejléc háttér görgetéskor + mobil CTA megjelenítése a hero után
+  const header = document.getElementById('header');
+  const sticky = document.getElementById('stickyCta');
+  const onScroll = () => {
+    header.classList.toggle('scrolled', scrollY > 40);
+    sticky.classList.toggle('translate-y-full', scrollY < 600);
+  };
+  addEventListener('scroll', onScroll); onScroll();
+
+  document.getElementById('burger').onclick = () => { document.getElementById('mobileMenu').classList.toggle('hidden'); header.classList.add('scrolled'); };
+  document.querySelectorAll('#mobileMenu a').forEach(a => a.onclick = () => document.getElementById('mobileMenu').classList.add('hidden'));
+
+  function openModal(tab){ document.getElementById('modal').classList.add('open'); switchTab(tab); }
+  function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+  function switchTab(tab){
+    ['login','register'].forEach(t => {
+      document.getElementById('form-'+t).classList.toggle('hidden', t !== tab);
+      document.getElementById('tab-'+t).className = 'flex-1 py-4 ' + (t === tab ? 'text-blue border-b-2 border-blue' : 'text-black/40');
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // Demo: az űrlapok még nincsenek bekötve
+  function done(form){
+    form.innerHTML = '<p class="py-6 text-center font-medium">Köszönjük! (Demo – az éles rendszerben itt történik a feldolgozás.)</p>';
+  }
+</script>
+</body>
+</html>
